@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAU Learning Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent:       #1a4fd6;
+  --accent-mid:   #3b6ef0;
+  --accent-light: #dce7fd;
+  --bg:           #e8f0fe;
+  --surface:      #ffffff;
+  --text:         #0d1b3e;
+  --muted:        #5a6a8a;
+  --border:       rgba(26,60,140,0.12);
+  --green:        #146b45;
+  --green-light:  #d6f5e7;
+  --amber:        #a05a08;
+  --amber-light:  #fef3dc;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:16px; scroll-behavior:smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND PATTERN ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(26,79,214,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(59,110,240,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 60% 10%, rgba(26,79,214,0.04) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── DOT GRID ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(26,60,140,0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── NAV ── */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 0 0;
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.logo-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+}
+
+.logo-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--border);
+  margin: 0 2px;
+  align-self: center;
+}
+
+.logo-sub {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.nav-tag {
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--accent-light);
+  color: var(--accent);
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ── HERO ── */
+.hero {
+  text-align: center;
+  padding: 80px 0 60px;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.15s ease forwards;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  background: var(--accent-light);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 28px;
+}
+
+.hero-eyebrow::before,
+.hero-eyebrow::after {
+  content: '';
+  width: 16px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 6vw, 58px);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.12;
+  margin-bottom: 18px;
+  letter-spacing: -1px;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 480px;
+  margin: 0 auto 12px;
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+.hero-meta {
+  font-size: 13px;
+  color: var(--muted);
+  opacity: 0.7;
+  margin-top: 6px;
+}
+
+/* ── SEPARATOR ── */
+.sep {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 10px 0 44px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.3s ease forwards;
+}
+.sep-line { flex: 1; height: 1px; background: var(--border); }
+.sep-label { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.10em; white-space: nowrap; }
+
+/* ── CARDS ── */
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 56px;
+}
+
+.portal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 32px 32px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.portal-card:nth-child(1) { animation: fadeUp 0.65s 0.35s ease forwards; }
+.portal-card:nth-child(2) { animation: fadeUp 0.65s 0.45s ease forwards; }
+
+.portal-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 20px 20px 0 0;
+  opacity: 0;
+  transition: opacity 0.22s;
+}
+
+.portal-card.student::before { background: linear-gradient(90deg, #1a4fd6, #3b6ef0); }
+.portal-card.teacher::before { background: linear-gradient(90deg, #146b45, #1d9e75); }
+
+.portal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 40px rgba(26,60,140,0.14);
+  border-color: rgba(26,60,140,0.22);
+}
+
+.portal-card:hover::before { opacity: 1; }
+
+.card-glow {
+  position: absolute;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  top: -80px; right: -60px;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  opacity: 0.035;
+}
+
+.student .card-glow { background: radial-gradient(circle, #1a4fd6, transparent 70%); }
+.teacher .card-glow { background: radial-gradient(circle, #146b45, transparent 70%); }
+.portal-card:hover .card-glow { opacity: 0.07; }
+
+.card-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  margin-bottom: 22px;
+  flex-shrink: 0;
+}
+
+.student .card-icon { background: var(--accent-light); }
+.teacher .card-icon { background: var(--green-light); }
+
+.card-role {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.student .card-role { color: var(--accent); }
+.teacher .card-role { color: var(--green); }
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.card-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+  margin-bottom: 28px;
+}
+
+.card-features {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 28px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.feature-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.student .feature-dot { background: var(--accent-mid); }
+.teacher .feature-dot { background: var(--green); }
+
+.card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 11px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: opacity 0.15s, transform 0.1s;
+  text-decoration: none;
+  align-self: flex-start;
+}
+
+.card-cta:hover { opacity: 0.88; }
+.card-cta:active { transform: scale(0.97); }
+.student .card-cta { background: var(--accent); color: white; }
+.teacher .card-cta { background: var(--green); color: white; }
+
+.cta-arrow {
+  transition: transform 0.2s;
+}
+.portal-card:hover .cta-arrow { transform: translateX(3px); }
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 56px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.55s ease forwards;
+}
+
+.stat-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 16px;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.stat-lbl {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.65s ease forwards;
+}
+
+.footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.footer-text {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-links a {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.footer-links a:hover { color: var(--accent); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .cards { grid-template-columns: 1fr; }
+  .stats-strip { grid-template-columns: 1fr 1fr; }
+  .hero { padding: 52px 0 40px; }
+  footer { flex-direction: column; gap: 14px; text-align: center; }
+  .footer-links { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <span class="logo-mark">SAU</span>
+      <div class="logo-divider"></div>
+      <span class="logo-sub">Learning Portal</span>
+    </div>
+    <span class="nav-tag">&#127979; Academic Year 2024–25</span>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">SAU · CSE Department</div>
+    <h1>One portal.<br><em>Every perspective.</em></h1>
+    <p class="hero-sub">A unified learning management system for students and faculty of SAU's Computer Science department.</p>
+    <p class="hero-meta">Select your role below to enter your dashboard</p>
+  </div>
+
+  <!-- SEPARATOR -->
+  <div class="sep">
+    <div class="sep-line"></div>
+    <span class="sep-label">Choose your dashboard</span>
+    <div class="sep-line"></div>
+  </div>
+
+  <!-- PORTAL CARDS -->
+  <div class="cards">
+
+    <!-- STUDENT -->
+    <a class="portal-card student" href="studentdashboard.html">
+      <div class="card-glow"></div>
+      <div class="card-icon">&#127891;</div>
+      <div class="card-role">Student Portal</div>
+      <div class="card-title">Student<br>Dashboard</div>
+      <p class="card-desc">Track your courses, assignments, grades, attendance, and academic progress all in one place.</p>
+      <div class="card-features">
+        <div class="feature-item"><div class="feature-dot"></div>Course progress & modules</div>
+        <div class="feature-item"><div class="feature-dot"></div>Assignment deadlines & grades</div>
+        <div class="feature-item"><div class="feature-dot"></div>CGPA tracker & academic standing</div>
+        <div class="feature-item"><div class="feature-dot"></div>Schedule, planner & QR attendance</div>
+      </div>
+      <span class="card-cta">Enter Student View <span class="cta-arrow">&#8594;</span></span>
+    </a>
+
+    <!-- TEACHER -->
+    <a class="portal-card teacher" href="teacher-dashboard.html">
+      <div class="card-glow"></div>
+      <div class="card-icon">&#128218;</div>
+      <div class="card-role">Faculty Portal</div>
+      <div class="card-title">Teacher's<br>Dashboard</div>
+      <p class="card-desc">Manage your courses, grade submissions, create quizzes, and monitor student performance across all classes.</p>
+      <div class="card-features">
+        <div class="feature-item"><div class="feature-dot"></div>Course & student management</div>
+        <div class="feature-item"><div class="feature-dot"></div>Assignment grading & gradebook</div>
+        <div class="feature-item"><div class="feature-dot"></div>Quiz assessment builder</div>
+        <div class="feature-item"><div class="feature-dot"></div>Announcements & class planner</div>
+      </div>
+      <span class="card-cta">Enter Faculty View <span class="cta-arrow">&#8594;</span></span>
+    </a>
+
+  </div>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-num">94</div>
+      <div class="stat-lbl">Students</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4</div>
+      <div class="stat-lbl">Courses</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">8.7</div>
+      <div class="stat-lbl">Avg CGPA</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">Sem 6</div>
+      <div class="stat-lbl">Current Term</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">SAU</span>
+    <span class="footer-text">B.Tech CSE &middot; Semester 6 &middot; 2024–25</span>
+    <div class="footer-links">
+      <a href="studentdashboard.html">Student</a>
+      <a href="teacher-dashboard.html">Faculty</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
